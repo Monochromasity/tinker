@@ -5,6 +5,21 @@
   </head>
   <body>
     <h1>Tinker</h1>
-    <iframe srcdoc="<i>Hello world!</i>"></iframe>
+    <form onsubmit="htmlload(event)">
+    	<p><label for="editor">Tinker Editor:</label></p>
+	    <textarea id="editor" name="editor" rows="100" cols="50" style="resize: both;overflow: auto;"></textarea>
+	    <input type="submit" value="Load">
+    </form>
+    <div id="ifr"></div>
+    <script>
+	    function htmlload(event) {
+    	  event.preventDefault();
+        let val = event.target.editor.value;
+        const ifr = document.createElement("iframe");
+        ifr.srcdoc = val
+        const ifrdiv = document.getElementById("ifr");
+        ifrdiv.appendChild(ifr);
+      }
+    </script>
   </body>
 </html>
