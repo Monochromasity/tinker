@@ -16,7 +16,11 @@
     	  		event.preventDefault();
         		let val = event.target.editor.value;
         		const ifr = document.createElement("iframe");
-        		ifr.srcdoc = val
+				if (val.substring(0,4) == "url:") {
+					ifr.src = val.substring(4);
+				} else {
+        			ifr.srcdoc = val
+				}
         		const ifrdiv = document.getElementById("ifr");
 				ifrdiv.innerHTML = "";
         		ifrdiv.appendChild(ifr);
