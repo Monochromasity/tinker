@@ -18,6 +18,14 @@
         		const ifr = document.createElement("iframe");
 				if (val.substring(0,4) == "url:") {
 					ifr.src = val.substring(4);
+				} else if (val.substring(0,9) == "urlfetch:") {
+					fetch(val.substring(9))
+						.then(function(response) {
+							return response.text();
+						})
+						.then(function(html) {
+							ifr.srcdoc = html;
+						})
 				} else {
         			ifr.srcdoc = val
 				}
