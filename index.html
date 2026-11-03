@@ -18,6 +18,7 @@
         		const ifr = document.createElement("iframe");
 				if (val.substring(0,4) == "url:") {
 					ifr.src = val.substring(4);
+					window.location.search = "?url=" + val.substring(4);
 				} else if (val.substring(0,9) == "urlfetch:") {
 					fetch(val.substring(9))
 						.then(function(response) {
@@ -25,14 +26,48 @@
 						})
 						.then(function(html) {
 							ifr.srcdoc = html;
+							window.location.search = "?urlfetch=" + val.substring(9);
 						})
 				} else {
-        			ifr.srcdoc = val
+        			ifr.srcdoc = val;
+					window.location.search = "?raw=" + encodeURI(val);
 				}
         		const ifrdiv = document.getElementById("ifr");
 				ifrdiv.innerHTML = "";
         		ifrdiv.appendChild(ifr);
       		}
+			const params = new URLSearchParams(window.location.search);
+			if params.has("url") {
+				const editor = document.getElementById("editor");
+				editor.textContent = params.get("url");
+				const ifr = document.createElement("iframe");
+				ifr.src = params.get("url");
+				const ifrdiv = document.getElementById("ifr");
+				ifrdiv.innerHTML = "";
+				ifrdiv.appendChild(ifr);
+			} else if params.has("urlfetch") {
+				const editor = document.getElementById("editor");
+				editor.textContent = params.get("urlfetch");
+				const ifr = document.createElement("iframe");
+				fetch(params.get("urlfetch"))
+						.then(function(response) {
+							return response.text();
+						})
+						.then(function(html) {
+							ifr.srcdoc = html;
+						})
+				const ifrdiv = document.getElementById("ifr");
+				ifrdiv.innerHTML = "";
+				ifrdiv.appendChild(ifr);
+			} else if params.has("raw") {
+				const editor = document.getElementById("editor");
+				editor.textContent = decodeURI(params.get("raw"));
+				const ifr = document.createElement("iframe");
+				ifr.srcdoc = decodeURI(params.get("raw"));
+				const ifrdiv = document.getElementById("ifr");
+				ifrdiv.innerHTML = "";
+				ifrdiv.appendChild(ifr);
+			}
     	</script>
   	</body>
 </html>
